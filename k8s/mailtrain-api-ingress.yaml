@@ -1,0 +1,16 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+  name: mailtrain-ingress
+spec:
+  rules:
+  - host: m.codeheadlabs.com
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: mailtrain
+          servicePort: 3000
+

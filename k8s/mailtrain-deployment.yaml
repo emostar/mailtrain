@@ -1,0 +1,44 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert
+    kompose.version: 1.18.0 (06a2e56)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: mailtrain
+  name: mailtrain
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        io.kompose.service: mailtrain
+    spec:
+      containers:
+      - image: 572300316781.dkr.ecr.us-west-2.amazonaws.com/mailtrain:latest
+        name: mailtrain
+        resources: {}
+        volumeMounts:
+        - mountPath: /app/public/grapejs/uploads
+          name: mailtrain-mailtrain-node-data
+        - mountPath: /app/public/mosaico/uploads
+          name: mailtrain-mailtrain-node-data
+        - mountPath: /app/protected/reports
+          name: mailtrain-mailtrain-node-reports
+        ports:
+        - containerPort: 3000
+      imagePullSecrets:
+        - name: ecr-secret
+      restartPolicy: Always
+      volumes:
+      - name: mailtrain-mailtrain-node-data
+        persistentVolumeClaim:
+          claimName: mailtrain-mailtrain-node-data
+      - name: mailtrain-mailtrain-node-reports
+        persistentVolumeClaim:
+          claimName: mailtrain-mailtrain-node-reports
+status: {}
